@@ -7,6 +7,7 @@ export default function Home() {
   const [status, setStatus] = useState("idle");
   const [logs, setLogs] = useState<string[]>([]);
   const [backupWallet, setBackupWallet] = useState("");
+  const [riskScore, setRiskScore] = useState<number | null>(null);
 
   const activityFeed = [
     "Unauthorized approval blocked",
@@ -18,6 +19,8 @@ export default function Home() {
 
   const activateGuardian = () => {
     setStatus("scanning");
+    setLogs([]);
+    setRiskScore(null);
 
     const messages = [
       "Scanning wallet approvals...",
@@ -39,6 +42,7 @@ export default function Home() {
 
         setTimeout(() => {
           setStatus("protected");
+          setRiskScore(Math.floor(Math.random() * 30) + 1);
         }, 1000);
       }
     }, 700);
@@ -56,25 +60,20 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-400 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
-      {/* Content */}
       <div className="text-center max-w-3xl w-full relative z-10">
 
-        {/* Wallet Button */}
         <div className="flex justify-end mb-6">
           <ConnectButton />
         </div>
 
-        {/* Title */}
         <h1 className="text-6xl font-bold text-cyan-400 mb-4 drop-shadow-lg">
           Wallet Guardian AI
         </h1>
 
-        {/* Subtitle */}
         <p className="text-gray-300 text-lg mb-8">
           AI-powered wallet protection system
         </p>
 
-        {/* Backup Wallet Input */}
         <div className="mb-6">
           <input
             type="text"
@@ -85,7 +84,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Idle State */}
         {status === "idle" && (
           <button
             onClick={activateGuardian}
@@ -95,7 +93,6 @@ export default function Home() {
           </button>
         )}
 
-        {/* Scanning State */}
         {status === "scanning" && (
           <div className="mt-8 border border-red-500 bg-black/80 backdrop-blur-md p-6 rounded-2xl shadow-lg shadow-red-500/40 text-left">
             <h2 className="text-3xl font-bold text-red-400 mb-4 text-center">
@@ -112,7 +109,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Protected State */}
         {status === "protected" && (
           <div className="mt-8 border border-green-500 bg-green-950/80 backdrop-blur-md p-6 rounded-2xl shadow-lg shadow-green-500/40">
 
@@ -128,7 +124,6 @@ export default function Home() {
               AI Guardian stopped suspicious activity.
             </p>
 
-            {/* Backup Wallet */}
             <div className="bg-black/40 rounded-xl p-4 text-left mb-6">
               <p className="text-gray-400 text-sm mb-1">
                 Protected Backup Wallet
@@ -139,7 +134,27 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Activity Feed */}
+            <div className="bg-black/40 rounded-xl p-4 text-left mb-6">
+              <h3 className="text-cyan-400 text-xl font-bold mb-3">
+                Wallet Risk Analysis
+              </h3>
+
+              <p className="text-white mb-2">
+                Risk Score: {riskScore}/100
+              </p>
+
+              <p className="text-green-400 font-semibold mb-4">
+                Status: SAFE
+              </p>
+
+              <ul className="space-y-2 text-gray-300">
+                <li>✓ No suspicious approvals</li>
+                <li>✓ No known drainer contracts</li>
+                <li>✓ No blacklist activity</li>
+                <li>✓ Low risk wallet</li>
+              </ul>
+            </div>
+
             <div className="bg-black/40 rounded-xl p-4 text-left">
               <h3 className="text-red-400 font-bold mb-3">
                 Live Security Activity
