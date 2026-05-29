@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 export default function Home() {
+  const { address, isConnected } = useAccount();
+
   const [status, setStatus] = useState("idle");
   const [logs, setLogs] = useState<string[]>([]);
   const [backupWallet, setBackupWallet] = useState("");
@@ -73,6 +76,23 @@ export default function Home() {
         <p className="text-gray-300 text-lg mb-8">
           AI-powered wallet protection system
         </p>
+
+        {/* Wallet Info */}
+        {isConnected && (
+          <div className="bg-black/40 border border-cyan-500 rounded-xl p-4 mb-6 text-left">
+            <h3 className="text-cyan-400 font-bold mb-3">
+              Connected Wallet
+            </h3>
+
+            <p className="text-green-400 mb-2">
+              Status: Connected
+            </p>
+
+            <p className="text-gray-300 break-all">
+              {address}
+            </p>
+          </div>
+        )}
 
         <div className="mb-6">
           <input
